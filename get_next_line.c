@@ -1,85 +1,102 @@
 #include "get_next_line.h"
 
-void ft_cut(char *str)
+char *ft_getline(char *line)
 {
+    int length;
     int i;
+    char *result;
 
-    i = 0;
-    if (!str)
-        return;
-    while (str[i] && str[i] != '\n')
-        i++;
-    if (str[i] == '\n')
-        i++;
-    while (str[i])
+    length = 0;
+
+    if (!line || line[0] == '\0')
+        return (NULL);
+
+    while (line[length] && line[length] != '\n')
+        length++;
+    if (line[length] == '\n')
+        length++;
+    
+    result = malloc(sizeof(*result) * length + 1);
+    if(!result)
+        return (NULL);
+    i = -1;
+    while (++i < length)
+        result[i] = line[i];
+    result[i] = '\0';
+    return (result);
+}
+
+char *ft_computestash(char *stash, int fd)
+{
+    char buff[BUFF_SIZE + 1];
+    int read_bytes;
+
+    read_bytes = 1;
+    while (read_bytes && !ft_strchr(stash, '\n'))
     {
-        str[i] = '\0';
-        i++;
+        read_bytes = read(fd, buff, BUFF_SIZE);
+        if (read_bytes == -1)
+            return (NULL);
+        buff[read_bytes] = '\0';
+        stash = ft_strjoin(stash, buff);
     }
+    return (stash);
 }
 
 char *get_next_line(int fd)
 {
-    static char *stash = "";
-    char buff[BUFF_SIZE];
+    static char *stash;
     char *line;
-    int read_bytes;
+    char *tmp;
 
-    //line = ft_strdup(stash);
-    line = stash;
-
-    //printf("Value of line and stash at the beginning : %s | %s\n", line, stash);
-
-    if (!line || fd < 0)
+    if (fd < 0 || BUFF_SIZE <= 0)
         return (NULL); 
-    if (ft_strchr(line, '\n'))
+
+    stash = ft_computestash(stash, fd);
+    line = ft_getline(stash);
+    if (ft_strchr(stash, '\n'))
     {
-        stash = ft_strdup(ft_strchr(line, '\n')+1);
-        ft_cut(line);
-        return line;
-    }
-    read_bytes = read(fd, buff, BUFF_SIZE);
-    if (!read_bytes || read_bytes == -1)
-        return (NULL);
-    while (read_bytes)
+        tmp = stash;
+        stash = ft_strdup(ft_strchr(stash, '\n') + 1);
+        free(tmp);
+    }      
+    else 
     {
-        buff[read_bytes] = '\0';
-        line = ft_strjoin(line, buff);
-        //printf("Value of line after join : %s\n", line);
-        if (ft_strchr(line, '\n'))
-        {
-            stash = ft_strdup(ft_strchr(line, '\n')+1);
-            ft_cut(line);
-            return line;
-        }           
-        read_bytes = read(fd, buff, BUFF_SIZE);
+        free(stash);
+        stash = NULL;
     }
     return line;
 }
 /*
 int main(void)
 {
-    int fd;
+    //int fd;
+    int fd2;
     char *tmp;
 
-    if ((fd = open("text1.txt", O_RDONLY)) != -1)
-    {
-        tmp = get_next_line(fd);
-        printf ("%s", tmp);
-        printf("********************************************\n");
-         tmp = get_next_line(fd);
-         printf ("%s", tmp);
-        printf("********************************************\n");
-        tmp = get_next_line(fd);
-        printf ("%s", tmp);
-        printf("********************************************\n");
-        tmp = get_next_line(fd);
-        printf ("%s", tmp);
-        printf("\n");
-    }
-    else
-    {
-        printf("%s \n", "File failed to open");
-    }
+    //fd = open("text1.txt", O_RDONLY);
+    fd2 = open("texr2.txt", O_RDONLY);
+    
+        // tmp = get_next_line(fd);
+        // printf ("%s", tmp);
+        // printf("********************************************\n");
+        // tmp = get_next_line(fd);
+        // printf ("%s", tmp);
+        // printf("********************************************\n");
+        // tmp = get_next_line(fd);
+        // printf ("%s", tmp);
+        // printf("********************************************\n");
+        // tmp = get_next_line(fd);
+        // printf ("%s", tmp);
+        tmp = get_next_line(fd2);
+        printf("%s \n", tmp);
+        tmp = get_next_line(fd2);
+        printf("%s \n", tmp);
+        // printf("\n");
+        // printf("********************************************\n");
+        // tmp = get_next_line(fd);
+        // printf ("%s", tmp);
+    
+
 }
 */
