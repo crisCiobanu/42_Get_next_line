@@ -34,3 +34,5 @@
 - Learnig to Learn
 - Learning together : Peer-to-Peer
 - Learning throw practice
+
+**More information on [Official 42 page](https://42.fr/en/homepage/)**
