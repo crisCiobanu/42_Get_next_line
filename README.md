@@ -1,4 +1,4 @@
-# 42 get_next_line Project
+# Ecole 42 get_next_line Project
 > The aim of this project is to code a function that returns a line read from a file descriptor.
 
 ## Goals
@@ -25,3 +25,12 @@
 
 - There are few tests in the `main` function in `get_next_line.c` file , uncommenting the main and compiling the project will launch the tests.
 - A third party tester is available on [GNL Tester](https://github.com/Tripouille/gnlTester)
+
+## About Ecole 42 Mulhouse
+
+> Ecole 42 Mulhouse a part of **42 Network** that includes 44 campuses in 26 countries, is a software-engineering school that provides a different way of teaching programmig.
+
+### The 42 Method:
+- Learnig to Learn
+- Learning together : Peer-to-Peer
+- Learning throw practice
